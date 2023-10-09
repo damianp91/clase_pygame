@@ -21,8 +21,13 @@ pygame.display.set_caption("Juego de prueba.")
 #calco.fill((0, 0, 255))
 #rec_calco = calco.get_rect()
 
-y = 300
-scuare = pygame.Rect(300, y, 80, 60)
+# Dentro de pantalla frase
+source = pygame.font.Font(None, 30)
+text = source.render("Hola mundo", True, black)
+rect_text = text.get_rect()
+rect_text = (center_x, 0)
+
+
 gravity_y = True
 gravity_x = True
 
@@ -37,28 +42,28 @@ while True:
             pygame.quit() # Esta es la inversa de pygame.init aca avisamos que vamos a salir del programa
             sys.exit() # Al momento de dar x a la pantalla va a salir sin mostrar error
     
-    
-    if gravity_y:
-        if scuare.bottom <= HEIGHT:
-            scuare.top += SPEED
+    for scuare in scuares:
+        if gravity_y:
+            if scuare["scuare"].bottom <= HEIGHT:
+                scuare["scuare"].top += SPEED
+            else:
+                gravity_y = not gravity_y
         else:
-            gravity_y = not gravity_y
-    else:
-        if scuare.top >= 0:
-            scuare.top -= SPEED
+            if scuare["scuare"].top >= 0:
+                scuare["scuare"].top -= SPEED
+            else:
+                gravity_y = not gravity_y
+        
+        if gravity_x:
+            if scuare["scuare"].right <= WIDTH:
+                scuare["scuare"].right += SPEED
+            else:
+                gravity_x = not gravity_x
         else:
-            gravity_y = not gravity_y
-    
-    if gravity_x:
-        if scuare.right <= WIDTH:
-            scuare.right += SPEED
-        else:
-            gravity_x = not gravity_x
-    else:
-        if scuare.left >= 0:
-            scuare.left -= SPEED
-        else:
-            gravity_x = not gravity_x
+            if scuare["scuare"].left >= 0:
+                scuare["scuare"].left -= SPEED
+            else:
+                gravity_x = not gravity_x
     
         # Esto es para ver figuras y como construirlas
         #-----> Actualiza los elementos
@@ -66,8 +71,9 @@ while True:
         #pygame.draw.rect(display, (0, 255, 0),rect_2)
     
     display.fill(costume)
-    
-    pygame.draw.rect(display, green, scuare)
+    display.blit(text, rect_text)
+    for scuare in scuares:
+        pygame.draw.rect(display, scuare["color"], scuare["scuare"], 0, scuare["ratio"])
     
         #pygame.draw.line(display, (23, 189, 165), (0, 0), x.center, 3)
         #pygame.draw.ellipse(display, (89, 145, 111), (300, 200, 100, 150))
