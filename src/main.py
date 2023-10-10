@@ -25,7 +25,7 @@ pygame.display.set_caption("Juego de prueba.")
 source = pygame.font.Font(None, 30)
 text = source.render("Hola mundo", True, black)
 rect_text = text.get_rect()
-rect_text = (center_x, 0)
+rect_text = (center_screen)
 
 
 gravity_y = True

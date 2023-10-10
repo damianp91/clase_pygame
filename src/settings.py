@@ -34,4 +34,6 @@ def color_sorprise():
     return (r, g, b)
 
 #fugure
-scuares = [{"scuare" : pygame.Rect(20, randrange(0, HEIGHT), 60, 60), "color" : color_sorprise(), "ratio" : 30}]
+scuares = [{"scuare" : pygame.Rect(20, randrange(0, HEIGHT), 60, 60), "color" : color_sorprise(), "ratio" : 35}]
+
+    
