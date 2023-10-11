@@ -33,7 +33,7 @@ rect_text.center = center_screen
 cant = 3
 
 for figire in range(0, cant):
-    figure = constru_figure(randrange(0, WIDTH - figure_w), randrange(0, HEIGHT - figure_h), 50, 50, red, list_mov[randrange(0, len(list_mov))])
+    figure = constru_figure(randrange(0, WIDTH - figure_w), randrange(0, HEIGHT - figure_h), direction= list_mov[randrange(0, len(list_mov))])
     scuares.append(figure)
 
 
