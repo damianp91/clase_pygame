@@ -1,6 +1,6 @@
 import pygame, sys
 from settings import *
-
+from random import randrange
 
 
 pygame.init() # Inicializar pygame
@@ -25,11 +25,17 @@ pygame.display.set_caption("Juego de prueba.")
 source = pygame.font.Font(None, 30)
 text = source.render("Hola mundo", True, black)
 rect_text = text.get_rect()
-rect_text = (center_screen)
+rect_text.center = center_screen
 
+# gravity_y = True
+# gravity_x = True
 
-gravity_y = True
-gravity_x = True
+cant = 3
+
+for figire in range(0, cant):
+    figure = constru_figure(randrange(0, WIDTH - figure_w), randrange(0, HEIGHT - figure_h), 50, 50, red, list_mov[randrange(0, len(list_mov))])
+    scuares.append(figure)
+
 
 while True:
     
@@ -42,33 +48,50 @@ while True:
             pygame.quit() # Esta es la inversa de pygame.init aca avisamos que vamos a salir del programa
             sys.exit() # Al momento de dar x a la pantalla va a salir sin mostrar error
     
-    for scuare in scuares:
-        if gravity_y:
-            if scuare["scuare"].bottom <= HEIGHT:
-                scuare["scuare"].top += SPEED
-            else:
-                gravity_y = not gravity_y
-        else:
-            if scuare["scuare"].top >= 0:
-                scuare["scuare"].top -= SPEED
-            else:
-                gravity_y = not gravity_y
-        
-        if gravity_x:
-            if scuare["scuare"].right <= WIDTH:
-                scuare["scuare"].right += SPEED
-            else:
-                gravity_x = not gravity_x
-        else:
-            if scuare["scuare"].left >= 0:
-                scuare["scuare"].left -= SPEED
-            else:
-                gravity_x = not gravity_x
-    
         # Esto es para ver figuras y como construirlas
         #-----> Actualiza los elementos
         #pygame.draw.rect(display, (255, 0, 0),rect_1, 3)
         #pygame.draw.rect(display, (0, 255, 0),rect_2)
+    
+    # Verificacion de choque de la figura y actualizo
+    for scuare in scuares:
+        if scuare["scuare"].right >= WIDTH:
+            if scuare["direction"] == DR:
+                scuare["direction"] = DL
+            elif scuare["direction"] == UR:
+                scuare["direction"] = UL
+        elif scuare["scuare"].bottom >= HEIGHT:
+            if scuare["direction"] == DR:
+                scuare["direction"] = UR
+            elif scuare["direction"] == DL:
+                scuare["direction"] = UL
+            scuare["color"] = color_sorprise() # cambio de color, forma, tamaño dependiento de lado que golpee
+        elif scuare["scuare"].left <= 0:
+            if scuare["direction"] == UL:
+                scuare["direction"] = UR
+            elif scuare["direction"] == DL:
+                scuare["direction"] = DR
+        elif scuare["scuare"].top <= 0:
+            if scuare["direction"] == UR:
+                scuare["direction"] = DR
+            elif scuare["direction"] == UL:
+                scuare["direction"] = DL
+            scuare["color"] = color_sorprise() # cambio de color, forma, tamaño dependiento de lado que golpee
+    
+    # Programo la direccion de la figura
+    for scuare in scuares:
+        if scuare["direction"] == DR:
+            scuare["scuare"].top += SPEED
+            scuare["scuare"].left += SPEED
+        elif scuare["direction"] == DL:
+            scuare["scuare"].top += SPEED
+            scuare["scuare"].left -= SPEED
+        elif scuare["direction"] == UL:
+            scuare["scuare"].top -= SPEED
+            scuare["scuare"].left -= SPEED
+        elif scuare["direction"] == UR:
+            scuare["scuare"].top -= SPEED
+            scuare["scuare"].left += SPEED
     
     display.fill(costume)
     display.blit(text, rect_text)
