@@ -21,20 +21,21 @@ pygame.display.set_caption("Juego de prueba.")
 #calco.fill((0, 0, 255))
 #rec_calco = calco.get_rect()
 
-# Dentro de pantalla frase
-source = pygame.font.Font(None, 30)
-text = source.render("Hola mundo", True, black)
-rect_text = text.get_rect()
-rect_text.center = center_screen
-
 # gravity_y = True
 # gravity_x = True
 
-cant = 3
+cant_coin = 5
+count_coins = 0
 
-for figire in range(0, cant):
-    figure = constru_figure(randrange(0, WIDTH - figure_w), randrange(0, HEIGHT - figure_h), direction= list_mov[randrange(0, len(list_mov))])
-    scuares.append(figure)
+# Fuente de frase en pantalla
+source = pygame.font.Font(None, 30)
+
+
+scuare = constru_figure(randrange(0, WIDTH - figure_w), randrange(0, HEIGHT - figure_h), 40, 40, direction= list_mov[randrange(0, len(list_mov))])
+
+for figure in range(cant_coin):
+    figure = constru_figure(randrange(0, WIDTH - coin_w), randrange(15, HEIGHT - coin_h), 15, 15, yellow, ratio= 35)
+    coins.append(figure)
 
 
 while True:
@@ -54,49 +55,65 @@ while True:
         #pygame.draw.rect(display, (0, 255, 0),rect_2)
     
     # Verificacion de choque de la figura y actualizo
-    for scuare in scuares:
-        if scuare["scuare"].right >= WIDTH:
-            if scuare["direction"] == DR:
-                scuare["direction"] = DL
-            elif scuare["direction"] == UR:
-                scuare["direction"] = UL
-        elif scuare["scuare"].bottom >= HEIGHT:
-            if scuare["direction"] == DR:
-                scuare["direction"] = UR
-            elif scuare["direction"] == DL:
-                scuare["direction"] = UL
-            scuare["color"] = color_sorprise() # cambio de color, forma, tamaño dependiento de lado que golpee
-        elif scuare["scuare"].left <= 0:
-            if scuare["direction"] == UL:
-                scuare["direction"] = UR
-            elif scuare["direction"] == DL:
-                scuare["direction"] = DR
-        elif scuare["scuare"].top <= 0:
-            if scuare["direction"] == UR:
-                scuare["direction"] = DR
-            elif scuare["direction"] == UL:
-                scuare["direction"] = DL
-            scuare["color"] = color_sorprise() # cambio de color, forma, tamaño dependiento de lado que golpee
+
+    if scuare["scuare"].right >= WIDTH:
+        if scuare["direction"] == DR:
+            scuare["direction"] = DL
+        elif scuare["direction"] == UR:
+            scuare["direction"] = UL
+    elif scuare["scuare"].bottom >= HEIGHT:
+        if scuare["direction"] == DR:
+            scuare["direction"] = UR
+        elif scuare["direction"] == DL:
+            scuare["direction"] = UL
+        #scuare["color"] = color_sorprise() # cambio de color, forma, tamaño dependiento de lado que golpee
+    elif scuare["scuare"].left <= 0:
+        if scuare["direction"] == UL:
+            scuare["direction"] = UR
+        elif scuare["direction"] == DL:
+            scuare["direction"] = DR
+    elif scuare["scuare"].top <= 0:
+        if scuare["direction"] == UR:
+            scuare["direction"] = DR
+        elif scuare["direction"] == UL:
+            scuare["direction"] = DL
+        #scuare["color"] = color_sorprise() # cambio de color, forma, tamaño dependiento de lado que golpee
     
     # Programo la direccion de la figura
-    for scuare in scuares:
-        if scuare["direction"] == DR:
-            scuare["scuare"].top += SPEED
-            scuare["scuare"].left += SPEED
-        elif scuare["direction"] == DL:
-            scuare["scuare"].top += SPEED
-            scuare["scuare"].left -= SPEED
-        elif scuare["direction"] == UL:
-            scuare["scuare"].top -= SPEED
-            scuare["scuare"].left -= SPEED
-        elif scuare["direction"] == UR:
-            scuare["scuare"].top -= SPEED
-            scuare["scuare"].left += SPEED
+    
+    if scuare["direction"] == DR:
+        scuare["scuare"].top += SPEED
+        scuare["scuare"].left += SPEED
+    elif scuare["direction"] == DL:
+        scuare["scuare"].top += SPEED
+        scuare["scuare"].left -= SPEED
+    elif scuare["direction"] == UL:
+        scuare["scuare"].top -= SPEED
+        scuare["scuare"].left -= SPEED
+    elif scuare["direction"] == UR:
+        scuare["scuare"].top -= SPEED
+        scuare["scuare"].left += SPEED
+    
+    for coin in coins[:]:
+        if detected_colition(coin["scuare"], scuare["scuare"]): # Recordar que acá estoy llamando a elementos de un diccionario.
+            coins.remove(coin)
+            count_coins += 1
+            if count_coins >= cant_coin:
+                count_coins = 0
+    
+    # Texto en pantalla
+    text = source.render(f"Coins: {count_coins}", True, yellow)
+    rect_text = text.get_rect()
+    rect_text.center = (center_x, 12)
     
     display.fill(costume)
-    display.blit(text, rect_text)
-    for scuare in scuares:
-        pygame.draw.rect(display, scuare["color"], scuare["scuare"], 0, scuare["ratio"])
+    tex = display.blit(text, rect_text)
+    print(f"{tex} {count_coins}")
+    
+    pygame.draw.rect(display, scuare["color"], scuare["scuare"], 0, scuare["ratio"])
+        
+    for coin in coins:
+        pygame.draw.rect(display, coin["color"], coin["scuare"], 0, coin["ratio"])
     
         #pygame.draw.line(display, (23, 189, 165), (0, 0), x.center, 3)
         #pygame.draw.ellipse(display, (89, 145, 111), (300, 200, 100, 150))
