@@ -1,4 +1,3 @@
-import pygame
 from random import randrange
 
 # Screen
@@ -20,7 +19,7 @@ SPEED = 3 # velocidad por pixeles
 green = (0, 255, 0)
 red = (255, 0, 0)
 black = (0, 0, 0)
-yellow = (255, 255, 50)
+yellow = (255, 255, 100)
 white = (255, 255, 255)
 blue = (0, 0, 255)
 costume = (78, 87, 146)
@@ -34,54 +33,20 @@ def color_sorprise():
     return (r, g, b)
 
 # Direction, se sigue esquema de teclado numerico de una compu
-UR = 9
-DR = 3
-DL = 1
-UL = 7
-list_mov = [UR, DR, DL, UL]
+# UR = 9
+# DR = 3
+# DL = 1
+# UL = 7
+# list_mov = [UR, DR, DL, UL]
 
+pull_up = False
+pull_down = False
+pull_left = False
+pull_right = False
+
+# Dimensiones de las figuras
 figure_w = 50
 figure_h = 50
 coin_w = 50
 coin_h = 50
 
-#fugure
-# scuares = [{"scuare" : pygame.Rect(randrange(0, WIDTH - figure_w), randrange(0, HEIGHT - figure_h), 50, 50), "color" : color_sorprise(), "direction" : DL, "ratio" : 35},
-#            {"scuare" : pygame.Rect(randrange(0, WIDTH - figure_w), randrange(0, HEIGHT - figure_h), 50, 50), "color" : color_sorprise(), "direction" : UL, "ratio" : 35},
-#            {"scuare" : pygame.Rect(randrange(0, WIDTH - figure_w), randrange(0, HEIGHT - figure_h), 50, 50), "color" : color_sorprise(), "direction" : DR, "ratio" : 35}]
-
-def detected_colition(figure_1, figure_2):
-    colition = False
-    
-    if point_in_rect(figure_1.topleft, figure_2) or \
-       point_in_rect(figure_1.topright, figure_2) or \
-       point_in_rect(figure_1.bottomleft, figure_2) or \
-       point_in_rect(figure_1.bottomright, figure_2) or \
-       point_in_rect(figure_2.topleft, figure_1) or \
-       point_in_rect(figure_2.topright, figure_1) or \
-       point_in_rect(figure_2.bottomleft, figure_1) or \
-       point_in_rect(figure_2.bottomright, figure_1):
-        colition = True
-    
-    return colition
-
-
-def point_in_rect(point, figure):
-    x, y = point  # Esto se llama desempaquetado de tuplas
-    
-    return x <= figure.right and x >= figure.left and y >= figure.top and y <= figure.bottom
-
-def constru_figure(point_x : int , point_y : int, fig_w : int = 50, fig_h : int = 50, color : tuple = (0, 0, 0), direction : int = 0, ratio : int = 0) -> (dict):
-    """Crea una figura de tipo rect segun los parametros que se le den a la funcion, teniendo en cuentas que tiene valores por defecto
-        sin conar los dos primeros parametros
-    Args:
-        point_x (int): coordenada en eje x, point_y (int): coordenada en eje y. 
-        Defaults to 50, fig_h : int = 50, color : tuple = (0, 0, 0), 
-            direction : int = 9, ratio : int = 0)->(dict.
-
-    Returns:
-        tuple: Devuelve un diccionario con los elemantos para dibujar una figura de tipo rect
-    """
-    return {"scuare" : pygame.Rect(point_x, point_y, fig_w, fig_h), "color" : color, "direction" : direction, "ratio" : ratio}
-
-coins = []
