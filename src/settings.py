@@ -6,6 +6,8 @@ HEIGHT = 400
 center_x = WIDTH // 2
 center_y = HEIGHT // 2
 center_screen = (center_x, center_y)
+size_dispaly = (WIDTH, HEIGHT)
+origin_display = (0, 0)
 
 
 # Motion speed
